@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aki KB - Selector de Bodega Ideal</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #F37021;
+            --brand-dark: #1e293b;
+            --brand-gray: #f8fafc;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--brand-gray);
+            color: var(--brand-dark);
+            overflow-x: hidden;
+        }
+
+        .lp-container {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: white;
+            padding: 15px 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .progress {
+            height: 8px;
+            border-radius: 10px;
+        }
+
+        .progress-bar {
+            background-color: var(--brand-orange);
+            transition: width 0.5s ease;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            animation: fadeInUp 0.5s ease forwards;
+            padding-top: 80px;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Buttons & Choices */
+        .choice-card {
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+            width: 100%;
+        }
+
+        .choice-card:hover {
+            border-color: var(--brand-orange);
+        }
+
+        .choice-card.selected {
+            border-color: var(--brand-orange);
+            background-color: #fff7ed;
+        }
+
+        .btn-brand {
+            background-color: var(--brand-orange);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 16px 32px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            width: 100%;
+            transition: transform 0.2s ease;
+        }
+
+        .btn-brand:hover {
+            background-color: #d65d16;
+            color: white;
+            transform: scale(1.02);
+        }
+
+        .btn-brand:disabled {
+            background-color: #cbd5e1;
+        }
+
+        .btn-outline-brand {
+            border: 2px solid var(--brand-orange);
+            color: var(--brand-orange);
+            border-radius: 50px;
+            padding: 14px 32px;
+            font-weight: 700;
+            width: 100%;
+        }
+
+        .logo-placeholder {
+            max-width: 180px;
+            margin-bottom: 30px;
+        }
+
+        .icon-box {
+            width: 45px;
+            height: 45px;
+            background: #fff7ed;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--brand-orange);
+            margin-right: 15px;
+        }
+
+        .rec-box {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 24px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        /* Utils */
+        .text-orange { color: var(--brand-orange); }
+        .font-800 { font-weight: 800; }
+
+    </style>
+</head>
+<body>
+
+    <div class="progress-container">
+        <div class="max-width-container mx-auto" style="max-width: 460px;">
+            <div class="progress">
+                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 20%"></div>
+            </div>
+            <div class="d-flex justify-content-between mt-2">
+                <small id="backBtn" class="text-muted" style="cursor:pointer; visibility: hidden;">← Volver</small>
+                <small class="text-muted fw-bold" id="stepText">Paso 1 de 5</small>
+            </div>
+        </div>
+    </div>
+
+    <div class="lp-container">
+        
+        <!-- PANTALLA 1: ENTRADA -->
+        <div id="screen1" class="screen active text-center">
+            <img src="https://akikb.cl/wp-content/uploads/2021/04/logo-akikb-header.png" alt="Logo Aki KB" class="logo-placeholder">
+            <h1 class="font-800 mb-3">Encuentra tu bodega ideal en menos de <span class="text-orange">30 segundos</span></h1>
+            <p class="text-muted mb-5">Selecciona una opción para comenzar:</p>
+
+            <button class="choice-card" onclick="selectType('B2B')">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box">🏢</div>
+                    <span class="h5 mb-0 fw-bold">Soy empresa</span>
+                </div>
+                <span>→</span>
+            </button>
+
+            <button class="choice-card" onclick="selectType('B2C')">
+                <div class="d-flex align-items-center">
+                    <div class="icon-box">🏠</div>
+                    <span class="h5 mb-0 fw-bold">Uso personal</span>
+                </div>
+                <span>→</span>
+            </button>
+
+            <div class="mt-5 d-flex flex-wrap justify-content-center gap-3 text-muted small">
+                <span>✓ Sin compromiso</span>
+                <span>✓ Asesoría experta</span>
+                <span>✓ Respuesta rápida</span>
+            </div>
+        </div>
+
+        <!-- PANTALLA 2: TAMAÑO -->
+        <div id="screen2" class="screen">
+            <h2 class="font-800 mb-4">¿Cuánto espacio necesitas?</h2>
+            <div id="sizeContainer" class="mb-5">
+                <!-- Se llena vía JS -->
+            </div>
+
+            <button id="btnScreen2" class="btn-brand" disabled onclick="navigate(3)">Continuar</button>
+        </div>
+
+        <!-- PANTALLA 3: USO -->
+        <div id="screen3" class="screen">
+            <h2 id="screen3Title" class="font-800 mb-4">¿Para qué la necesitas?</h2>
+            
+            <div id="optionsContainer" class="mb-4">
+                <!-- Se llena vía JS -->
+            </div>
+
+            <button id="btnScreen3" class="btn-brand" disabled onclick="navigate(4)">Continuar</button>
+        </div>
+
+        <!-- PANTALLA 4: URGENCIA -->
+        <div id="screen4" class="screen">
+            <h2 class="font-800 mb-4">¿Cuándo la necesitas?</h2>
+            <div class="mb-5">
+                <button class="choice-card mb-3" onclick="selectUrgencia('alta', this)">
+                    <span class="fw-bold">🔥 Lo antes posible</span>
+                </button>
+                <button class="choice-card mb-3" onclick="selectUrgencia('media', this)">
+                    <span class="fw-bold">⏳ En las próximas semanas</span>
+                </button>
+                <button class="choice-card mb-3" onclick="selectUrgencia('baja', this)">
+                    <span class="fw-bold">🧠 Solo estoy evaluando</span>
+                </button>
+            </div>
+
+            <button id="btnScreen4" class="btn-brand mb-3" disabled onclick="navigate(5)">Ver recomendación 🚀</button>
+        </div>
+
+        <!-- PANTALLA 5: RESULTADO -->
+        <div id="screen5" class="screen text-center">
+            <span class="badge bg-orange-light text-orange mb-2 p-2 px-3 rounded-pill" style="background: #fff7ed;">🎯 RECOMENDACIÓN</span>
+            <h2 id="recTitle" class="font-800 mb-1">Bodega Mediana</h2>
+            <p id="recSucursal" class="text-muted mb-4">Sucursal Quilpué</p>
+
+            <div class="rec-box text-start">
+                <p id="recDesc" class="font-italic text-muted mb-4">Ideal para mudanzas y almacenamiento personal.</p>
+                <ul class="list-unstyled space-y-2">
+                    <li class="mb-2">✅ Acceso fácil y cómodo</li>
+                    <li class="mb-2">✅ Seguridad 24/7</li>
+                    <li class="mb-2">✅ Flexibilidad de contrato</li>
+                </ul>
+            </div>
+
+            <button class="btn-brand mb-3" onclick="navigate(6)">Cotizar ahora</button>
+            <button class="btn btn-link text-muted fw-bold text-decoration-none" onclick="navigate(2)">Ver otros tamaños</button>
+        </div>
+
+        <!-- PANTALLA 6: FORMULARIO -->
+        <div id="screen6" class="screen">
+            <div id="formContainer">
+                <h2 class="font-800 mb-2">Recibe tu cotización</h2>
+                <p class="text-muted mb-4">Completa tus datos para enviarte los precios detallados.</p>
+
+                <form id="hsForm" onsubmit="handleFormSubmit(event)">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Nombre completo</label>
+                        <input type="text" id="nombre" class="form-control form-control-lg rounded-4 border-2" required placeholder="Ej: Juan Pérez">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">Email</label>
+                        <input type="email" id="email" class="form-control form-control-lg rounded-4 border-2" required placeholder="juan@email.com">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">Teléfono</label>
+                        <input type="tel" id="telefono" class="form-control form-control-lg rounded-4 border-2" required placeholder="+56 9 ...">
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn-brand">
+                        <span id="btnText">Obtener cotización</span>
+                        <div id="btnSpinner" class="spinner-border spinner-border-sm d-none" role="status"></div>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Success Message -->
+            <div id="successMsg" class="text-center d-none py-5">
+                <div class="display-1 text-success mb-4">✓</div>
+                <h2 class="font-800">¡Recibimos tu solicitud!</h2>
+                <p class="text-muted">Un asesor te contactará en breve.</p>
+                <button class="btn btn-outline-dark rounded-pill mt-4" onclick="location.reload()">Volver al inicio</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4">
+                <div class="modal-body text-center p-4">
+                    <h5 class="font-800 mb-3">¿Quedaste con dudas?</h5>
+                    <p class="text-muted mb-4">Nuestro equipo está listo para ayudarte.</p>
+                    <button class="btn btn-outline-success w-100 rounded-pill mb-3" onclick="openWA()">💬 Hablar por WhatsApp</button>
+                    <button class="btn btn-outline-primary w-100 rounded-pill" onclick="window.location.href='https://akikb.cl/'">🌐 Ir al sitio web</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script de Lógica -->
+    <script>
+        // CONFIGURACIÓN HUBSPOT
+        const PORTAL_ID = 'TU_PORTAL_ID'; // Reemplazar
+        const FORM_ID = 'TU_FORM_ID';     // Reemplazar
+
+        let currentStep = 1;
+        const formData = {
+            tipo_cliente: '',
+            uso: '',
+            tamano: '',
+            urgencia: '',
+            nombre: '',
+            email: '',
+            telefono: ''
+        };
+
+        const configB2B = {
+            title: '¿Para qué necesita la empresa la bodega?',
+            options: [
+                { id: 'ecommerce', label: 'E-commerce / Logística', icon: '📦' },
+                { id: 'materiales', label: 'Materiales / Herramientas', icon: '🏗️' },
+                { id: 'archivo', label: 'Archivo / Almacenamiento', icon: '🗄️' }
+            ],
+            sizes: [
+                { id: 'small', label: 'Pequeño (1–5 m²)' },
+                { id: 'medium', label: 'Mediano (5–10 m²)' },
+                { id: 'large', label: 'Grande (+10 m²)' }
+            ]
+        };
+
+        const configB2C = {
+            title: '¿Qué necesitas guardar?',
+            options: [
+                { id: 'mudanza', label: 'Mercadería', icon: '🚚' },
+                { id: 'personales', label: 'Cosas personales', icon: '🏠' },
+                { id: 'viaje', label: 'Viaje / Temporal', icon: '🧳' },
+                { id: 'otros', label: 'Otros', icon: '🚲' }
+            ],
+            sizes: [
+                { id: 'small', label: 'Pequeño (Clóset)' },
+                { id: 'medium', label: 'Mediano (Pieza)' },
+                { id: 'large', label: 'Grande (Depto completo)' }
+            ]
+        };
+
+        function selectType(type) {
+            formData.tipo_cliente = type;
+            renderScreen2();
+            navigate(2);
+        }
+
+        function renderScreen2() {
+            const config = formData.tipo_cliente === 'B2B' ? configB2B : configB2C;
+            const sizeContainer = document.getElementById('sizeContainer');
+            sizeContainer.innerHTML = config.sizes.map(sz => `
+                <button class="choice-card mb-2 ${formData.tamano === sz.id ? 'selected' : ''}" onclick="selectTamano('${sz.id}', this)">
+                    <span class="fw-bold">${sz.label}</span>
+                </button>
+            `).join('');
+        }
+
+        function renderScreen3() {
+            const config = formData.tipo_cliente === 'B2B' ? configB2B : configB2C;
+            document.getElementById('screen3Title').innerText = config.title;
+            
+            const optContainer = document.getElementById('optionsContainer');
+            optContainer.innerHTML = config.options.map(opt => `
+                <button class="choice-card mb-2 ${formData.uso === opt.id ? 'selected' : ''}" onclick="selectUso('${opt.id}', this)">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-box">${opt.icon}</div>
+                        <span class="fw-bold">${opt.label}</span>
+                    </div>
+                </button>
+            `).join('');
+        }
+
+        function selectTamano(id, el) {
+            formData.tamano = id;
+            document.querySelectorAll('#sizeContainer .choice-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            validateScreen2();
+        }
+
+        function validateScreen2() {
+            document.getElementById('btnScreen2').disabled = !formData.tamano;
+        }
+
+        function selectUso(id, el) {
+            formData.uso = id;
+            document.querySelectorAll('#optionsContainer .choice-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            validateScreen3();
+        }
+
+        function validateScreen3() {
+            document.getElementById('btnScreen3').disabled = !formData.uso;
+        }
+
+        function selectUrgencia(val, el) {
+            formData.urgencia = val;
+            document.querySelectorAll('#screen4 .choice-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            document.getElementById('btnScreen4').disabled = false;
+        }
+
+        function navigate(step) {
+            // Hide all
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+            // Show target
+            document.getElementById('screen' + step).classList.add('active');
+            currentStep = step;
+
+            // Update Progress
+            const prog = (step / 6) * 100;
+            document.getElementById('progressBar').style.width = prog + '%';
+            document.getElementById('stepText').innerText = `Paso ${step} de 6`;
+            document.getElementById('backBtn').style.visibility = step > 1 ? 'visible' : 'hidden';
+
+            if (step === 3) renderScreen3();
+            if (step === 5) generateRecommendation();
+            window.scrollTo(0, 0);
+        }
+
+        document.getElementById('backBtn').onclick = () => navigate(currentStep - 1);
+
+        function generateRecommendation() {
+            const title = document.getElementById('recTitle');
+            const desc = document.getElementById('recDesc');
+            
+            if (formData.tipo_cliente === 'B2B') {
+                title.innerText = formData.tamano === 'large' ? 'Bodega de Alto Volumen' : 'Bodega Comercial';
+                desc.innerText = 'Ideal para inventario, logística e-commerce y equipos profesionales.';
+            } else {
+                title.innerText = formData.uso === 'mudanza' ? 'Bodega Familiar Plus' : 'Mini Bodega Personal';
+                desc.innerText = 'Excelente opción para liberar espacio en casa o proteger tus bienes durante una mudanza.';
+            }
+        }
+
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            
+            formData.nombre = document.getElementById('nombre').value;
+            formData.email = document.getElementById('email').value;
+            formData.telefono = document.getElementById('telefono').value;
+
+            const btn = document.getElementById('submitBtn');
+            const text = document.getElementById('btnText');
+            const spinner = document.getElementById('btnSpinner');
+
+            btn.disabled = true;
+            text.classList.add('d-none');
+            spinner.classList.remove('d-none');
+
+            // --- Lógica de Redirección ---
+            // Definimos la URL de destino según la lógica pedida
+            let redirectUrl = null;
+            if (formData.tipo_cliente === 'B2B' && formData.tamano === 'large') redirectUrl = '/resultado-bodega-grande';
+            else if (formData.tipo_cliente === 'B2C' && formData.uso === 'mudanza') redirectUrl = '/resultado-b2c';
+            else if (formData.tipo_cliente === 'B2B' && formData.uso === 'ecommerce') redirectUrl = '/resultado-b2b';
+
+            // --- Envío a HubSpot ---
+            const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_ID}`;
+            const payload = {
+                fields: [
+                    { name: 'firstname', value: formData.nombre },
+                    { name: 'email', value: formData.email },
+                    { name: 'phone', value: formData.telefono },
+                    { name: 'tipo_cliente', value: formData.tipo_cliente },
+                    { name: 'tamano', value: formData.tamano },
+                    { name: 'uso', value: formData.uso },
+                    { name: 'urgencia', value: formData.urgencia }
+                ],
+                context: {
+                    pageUri: window.location.href,
+                    pageName: document.title
+                }
+            };
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (response.ok) {
+                    if (redirectUrl) {
+                        window.location.href = redirectUrl;
+                    } else {
+                        new bootstrap.Modal(document.getElementById('successModal')).show();
+                    }
+                } else {
+                    alert("Error al enviar. Por favor intente nuevamente.");
+                    btn.disabled = false;
+                    text.classList.remove('d-none');
+                    spinner.classList.add('d-none');
+                }
+            } catch (err) {
+                console.error(err);
+                alert("Error de conexión.");
+                btn.disabled = false;
+                text.classList.remove('d-none');
+                spinner.classList.add('d-none');
+            }
+        }
+
+        function openWA() {
+            const msg = `Hola! Soy ${formData.tipo_cliente}, busco una bodega ${formData.tamano} para ${formData.uso}.`;
+            window.open(`https://wa.me/56912345678?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+    </script>
+
+    <!-- Bootstrap JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
