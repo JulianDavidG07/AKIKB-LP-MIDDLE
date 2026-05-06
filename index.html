@@ -313,7 +313,6 @@
 
     <!-- Script de Lógica -->
     <script>
-
         // CONFIGURACIÓN HUBSPOT
         const PORTAL_ID = '46409671'; // Reemplazar
         const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1';     // Reemplazar
@@ -466,13 +465,6 @@
             text.classList.add('d-none');
             spinner.classList.remove('d-none');
 
-            // --- Lógica de Redirección ---
-            // Definimos la URL de destino según la lógica pedida
-            let redirectUrl = null;
-            if (formData.tipo_cliente === 'B2B' && formData.tamano === 'large') redirectUrl = '/resultado-bodega-grande';
-            else if (formData.tipo_cliente === 'B2C' && formData.uso === 'mudanza') redirectUrl = '/resultado-b2c';
-            else if (formData.tipo_cliente === 'B2B' && formData.uso === 'ecommerce') redirectUrl = '/resultado-b2b';
-
             // --- Envío a HubSpot ---
             const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_ID}`;
             const payload = {
@@ -499,11 +491,8 @@
                 });
 
                 if (response.ok) {
-                    if (redirectUrl) {
-                        window.location.href = redirectUrl;
-                    } else {
-                        new bootstrap.Modal(document.getElementById('successModal')).show();
-                    }
+                    // Se abre directamente el modal sin redirecciones previas
+                    new bootstrap.Modal(document.getElementById('successModal')).show();
                 } else {
                     alert("Error al enviar. Por favor intente nuevamente.");
                     btn.disabled = false;
