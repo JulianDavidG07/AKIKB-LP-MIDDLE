@@ -302,9 +302,18 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4">
                 <div class="modal-body text-center p-4">
-                    <h5 class="font-800 mb-3">¿Quedaste con dudas?</h5>
-                    <p class="text-muted mb-4">Nuestro equipo está listo para ayudarte.</p>
-                    <button class="btn btn-outline-success w-100 rounded-pill mb-3" onclick="openWA()">💬 Hablar por WhatsApp</button>
+                    <div class="text-success mb-3" style="font-size: 2.5rem;">🎉</div>
+                    <h4 class="fw-bold text-success mb-2">¡Datos enviados con éxito!</h4>
+                    <p class="text-muted small mb-4">Hemos recibido tu solicitud. Un ejecutivo te contactará muy pronto.</p>
+                    
+                    <hr class="my-3 text-muted opacity-25">
+
+                    <h5 class="font-800 mb-2">¿Quedaste con dudas?</h5>
+                    <p class="text-muted small mb-3">Nuestro equipo está listo para ayudarte inmediatamente.</p>
+                    
+                    <button class="btn btn-outline-success w-100 rounded-pill mb-4" onclick="openWA()">💬 Hablar por WhatsApp</button>
+                    
+                    <p class="text-muted small mb-2">¿Prefieres apartar desde nuestro sitio web?</p>
                     <button class="btn btn-outline-primary w-100 rounded-pill" onclick="window.location.href='https://akikb.cl/'">🌐 Ir al sitio web</button>
                 </div>
             </div>
@@ -461,6 +470,7 @@
             const text = document.getElementById('btnText');
             const spinner = document.getElementById('btnSpinner');
 
+            // 1. Activar Loader
             btn.disabled = true;
             text.classList.add('d-none');
             spinner.classList.remove('d-none');
@@ -491,7 +501,12 @@
                 });
 
                 if (response.ok) {
-                    // Se abre directamente el modal sin redirecciones previas
+                    // 2. Apagar Loader en el formulario de fondo tras el éxito
+                    btn.disabled = false;
+                    text.classList.remove('d-none');
+                    spinner.classList.add('d-none');
+
+                    // 3. Mostrar el nuevo modal estructurado
                     new bootstrap.Modal(document.getElementById('successModal')).show();
                 } else {
                     alert("Error al enviar. Por favor intente nuevamente.");
