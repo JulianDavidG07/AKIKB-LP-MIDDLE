@@ -323,8 +323,8 @@
     <!-- Script de Lógica -->
     <script>
         // CONFIGURACIÓN HUBSPOT
-        const PORTAL_ID = '46409671'; // Reemplazar
-        const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1';     // Reemplazar
+        const PORTAL_ID = '46409671'; // Reemplazar con tu ID real si es diferente
+        const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1'; // Reemplazar con tu Form ID real
 
         let currentStep = 1;
         const formData = {
@@ -345,9 +345,9 @@
                 { id: 'archivo', label: 'Archivo / Almacenamiento', icon: '🗄️' }
             ],
             sizes: [
-                { id: 'small', label: 'Pequeño (1–5 m²)' },
-                { id: 'medium', label: 'Mediano (5–10 m²)' },
-                { id: 'large', label: 'Grande (+10 m²)' }
+                { id: 'pequeno', label: 'Pequeño (1–5 m²)' },
+                { id: 'mediano', label: 'Mediano (5–10 m²)' },
+                { id: 'grande', label: 'Grande (+10 m²)' }
             ]
         };
 
@@ -360,9 +360,9 @@
                 { id: 'otros', label: 'Otros', icon: '🚲' }
             ],
             sizes: [
-                { id: 'small', label: 'Pequeño (Clóset)' },
-                { id: 'medium', label: 'Mediano (Pieza)' },
-                { id: 'large', label: 'Grande (Depto completo)' }
+                { id: 'pequeno', label: 'Pequeño (Clóset)' },
+                { id: 'mediano', label: 'Mediano (Pieza)' },
+                { id: 'grande', label: 'Grande (Depto completo)' }
             ]
         };
 
@@ -451,7 +451,7 @@
             const desc = document.getElementById('recDesc');
             
             if (formData.tipo_cliente === 'B2B') {
-                title.innerText = formData.tamano === 'large' ? 'Bodega de Alto Volumen' : 'Bodega Comercial';
+                title.innerText = formData.tamano === 'grande' ? 'Bodega de Alto Volumen' : 'Bodega Comercial';
                 desc.innerText = 'Ideal para inventario, logística e-commerce y equipos profesionales.';
             } else {
                 title.innerText = formData.uso === 'mudanza' ? 'Bodega Familiar Plus' : 'Mini Bodega Personal';
