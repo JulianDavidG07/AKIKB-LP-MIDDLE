@@ -116,15 +116,6 @@
             background-color: #cbd5e1;
         }
 
-        .btn-outline-brand {
-            border: 2px solid var(--brand-orange);
-            color: var(--brand-orange);
-            border-radius: 50px;
-            padding: 14px 32px;
-            font-weight: 700;
-            width: 100%;
-        }
-
         .logo-placeholder {
             max-width: 180px;
             margin-bottom: 12px;
@@ -142,17 +133,14 @@
             margin-right: 15px;
         }
 
-        .rec-box {
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 25px;
-        }
-
         /* Utils */
         .text-orange { color: var(--brand-orange); }
         .font-800 { font-weight: 800; }
+
+        .form-control:focus {
+            border-color: var(--brand-orange);
+            box-shadow: 0 0 0 0.25rem rgba(243, 112, 33, 0.1);
+        }
 
     </style>
 </head>
@@ -237,46 +225,37 @@
                 </button>
             </div>
 
-            <button id="btnScreen4" class="btn-brand mb-3" disabled onclick="navigate(5)">Ver recomendación 🚀</button>
+            <button id="btnScreen4" class="btn-brand mb-3" disabled onclick="navigate(5)">Cotizar ahora 🚀</button>
         </div>
 
-        <!-- PANTALLA 5: RESULTADO -->
-        <div id="screen5" class="screen text-center">
-            <span class="badge bg-orange-light text-orange mb-2 p-2 px-3 rounded-pill" style="background: #fff7ed;">🎯 RECOMENDACIÓN</span>
-            <h2 id="recTitle" class="font-800 mb-1">Bodega Mediana</h2>
-            <p id="recSucursal" class="text-muted mb-4">Sucursal Quilpué</p>
-
-            <div class="rec-box text-start">
-                <p id="recDesc" class="font-italic text-muted mb-4">Ideal para mudanzas y almacenamiento personal.</p>
-                <ul class="list-unstyled space-y-2">
-                    <li class="mb-2">✅ Acceso fácil y cómodo</li>
-                    <li class="mb-2">✅ Seguridad 24/7</li>
-                    <li class="mb-2">✅ Flexibilidad de contrato</li>
-                </ul>
-            </div>
-
-            <button class="btn-brand mb-3" onclick="navigate(6)">Cotizar ahora</button>
-            <button class="btn btn-link text-muted fw-bold text-decoration-none" onclick="navigate(2)">Ver otros tamaños</button>
-        </div>
-
-        <!-- PANTALLA 6: FORMULARIO -->
-        <div id="screen6" class="screen">
+        <!-- PANTALLA 5: FORMULARIO (Antes Paso 6) -->
+        <div id="screen5" class="screen">
             <div id="formContainer">
                 <h2 class="font-800 mb-2">Recibe tu cotización</h2>
                 <p class="text-muted mb-4">Completa tus datos para enviarte los precios detallados.</p>
 
                 <form id="hsForm" onsubmit="handleFormSubmit(event)">
-                    <div class="mb-3">
-                        <label class="form-label small fw-bold">Nombre completo</label>
-                        <input type="text" id="nombre" class="form-control form-control-lg rounded-4 border-2" required placeholder="Ej: Juan Pérez">
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Nombre</label>
+                            <input type="text" id="firstname" class="form-control form-control-lg rounded-4 border-2" required placeholder="Ej: Juan">
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="form-label small fw-bold">Apellido</label>
+                            <input type="text" id="lastname" class="form-control form-control-lg rounded-4 border-2" required placeholder="Ej: Pérez">
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label small fw-bold">Email</label>
                         <input type="email" id="email" class="form-control form-control-lg rounded-4 border-2" required placeholder="juan@email.com">
                     </div>
-                    <div class="mb-4">
+                    <div class="mb-3">
                         <label class="form-label small fw-bold">Teléfono</label>
                         <input type="tel" id="telefono" class="form-control form-control-lg rounded-4 border-2" required placeholder="+56 9 ...">
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold">Comuna</label>
+                        <input type="text" id="comuna" class="form-control form-control-lg rounded-4 border-2" required placeholder="¿En qué comuna buscas?">
                     </div>
 
                     <button type="submit" id="submitBtn" class="btn-brand">
@@ -286,7 +265,7 @@
                 </form>
             </div>
 
-            <!-- Success Message -->
+            <!-- Success Message Inline -->
             <div id="successMsg" class="text-center d-none py-5">
                 <div class="display-1 text-success mb-4">✓</div>
                 <h2 class="font-800">¡Recibimos tu solicitud!</h2>
@@ -313,7 +292,7 @@
                     
                     <button class="btn btn-outline-success w-100 rounded-pill mb-4" onclick="openWA()">💬 Hablar por WhatsApp</button>
                     
-                    <p class="text-muted small mb-2">¿Prefieres apartar desde nuestro sitio web?</p>
+                    <p class="text-muted small mb-2">¿Prefieres ver más opciones?</p>
                     <button class="btn btn-outline-primary w-100 rounded-pill" onclick="window.location.href='https://akikb.cl/'">🌐 Ir al sitio web</button>
                 </div>
             </div>
@@ -323,18 +302,21 @@
     <!-- Script de Lógica -->
     <script>
         // CONFIGURACIÓN HUBSPOT
-        const PORTAL_ID = '46409671'; // Reemplazar con tu ID real si es diferente
-        const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1'; // Reemplazar con tu Form ID real
+        const PORTAL_ID = '46409671'; 
+        const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1'; 
 
         let currentStep = 1;
+        const totalSteps = 5;
         const formData = {
             tipo_cliente: '',
             uso: '',
             tamano: '',
             urgencia: '',
-            nombre: '',
+            firstname: '',
+            lastname: '',
             email: '',
-            telefono: ''
+            telefono: '',
+            comuna: ''
         };
 
         const configB2B = {
@@ -401,22 +383,14 @@
             formData.tamano = id;
             document.querySelectorAll('#sizeContainer .choice-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
-            validateScreen2();
-        }
-
-        function validateScreen2() {
-            document.getElementById('btnScreen2').disabled = !formData.tamano;
+            document.getElementById('btnScreen2').disabled = false;
         }
 
         function selectUso(id, el) {
             formData.uso = id;
             document.querySelectorAll('#optionsContainer .choice-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
-            validateScreen3();
-        }
-
-        function validateScreen3() {
-            document.getElementById('btnScreen3').disabled = !formData.uso;
+            document.getElementById('btnScreen3').disabled = false;
         }
 
         function selectUrgencia(val, el) {
@@ -434,43 +408,31 @@
             currentStep = step;
 
             // Update Progress
-            const prog = (step / 6) * 100;
+            const prog = (step / totalSteps) * 100;
             document.getElementById('progressBar').style.width = prog + '%';
-            document.getElementById('stepText').innerText = `Paso ${step} de 6`;
+            document.getElementById('stepText').innerText = `Paso ${step} de ${totalSteps}`;
             document.getElementById('backBtn').style.visibility = step > 1 ? 'visible' : 'hidden';
 
             if (step === 3) renderScreen3();
-            if (step === 5) generateRecommendation();
             window.scrollTo(0, 0);
         }
 
         document.getElementById('backBtn').onclick = () => navigate(currentStep - 1);
 
-        function generateRecommendation() {
-            const title = document.getElementById('recTitle');
-            const desc = document.getElementById('recDesc');
-            
-            if (formData.tipo_cliente === 'B2B') {
-                title.innerText = formData.tamano === 'grande' ? 'Bodega de Alto Volumen' : 'Bodega Comercial';
-                desc.innerText = 'Ideal para inventario, logística e-commerce y equipos profesionales.';
-            } else {
-                title.innerText = formData.uso === 'mudanza' ? 'Bodega Familiar Plus' : 'Mini Bodega Personal';
-                desc.innerText = 'Excelente opción para liberar espacio en casa o proteger tus bienes durante una mudanza.';
-            }
-        }
-
         async function handleFormSubmit(e) {
             e.preventDefault();
             
-            formData.nombre = document.getElementById('nombre').value;
+            formData.firstname = document.getElementById('firstname').value;
+            formData.lastname = document.getElementById('lastname').value;
             formData.email = document.getElementById('email').value;
             formData.telefono = document.getElementById('telefono').value;
+            formData.comuna = document.getElementById('comuna').value;
 
             const btn = document.getElementById('submitBtn');
             const text = document.getElementById('btnText');
             const spinner = document.getElementById('btnSpinner');
 
-            // 1. Activar Loader
+            // Activar Loader
             btn.disabled = true;
             text.classList.add('d-none');
             spinner.classList.remove('d-none');
@@ -479,9 +441,11 @@
             const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_ID}`;
             const payload = {
                 fields: [
-                    { name: 'firstname', value: formData.nombre },
+                    { name: 'firstname', value: formData.firstname },
+                    { name: 'lastname', value: formData.lastname },
                     { name: 'email', value: formData.email },
                     { name: 'phone', value: formData.telefono },
+                    { name: 'comuna', value: formData.comuna }, // Asegúrate que el internal name sea 'comuna' en HS
                     { name: 'tipo_cliente', value: formData.tipo_cliente },
                     { name: 'tamano', value: formData.tamano },
                     { name: 'uso', value: formData.uso },
@@ -501,22 +465,27 @@
                 });
 
                 if (response.ok) {
-                    // 2. Apagar Loader en el formulario de fondo tras el éxito
                     btn.disabled = false;
                     text.classList.remove('d-none');
                     spinner.classList.add('d-none');
-
-                    // 3. Mostrar el nuevo modal estructurado
+                    
+                    // Mostrar modal de éxito
                     new bootstrap.Modal(document.getElementById('successModal')).show();
+                    
+                    // Opcional: mostrar mensaje en pantalla si el modal se cierra
+                    document.getElementById('formContainer').classList.add('d-none');
+                    document.getElementById('successMsg').classList.remove('d-none');
                 } else {
-                    alert("Error al enviar. Por favor intente nuevamente.");
+                    const errData = await response.json();
+                    console.error("HubSpot Error:", errData);
+                    alert("Hubo un problema al enviar los datos. Revisa que el email sea válido.");
                     btn.disabled = false;
                     text.classList.remove('d-none');
                     spinner.classList.add('d-none');
                 }
             } catch (err) {
                 console.error(err);
-                alert("Error de conexión.");
+                alert("Error de conexión con el servidor.");
                 btn.disabled = false;
                 text.classList.remove('d-none');
                 spinner.classList.add('d-none');
@@ -524,7 +493,7 @@
         }
 
         function openWA() {
-            const msg = `Hola! Soy ${formData.tipo_cliente}, busco una bodega ${formData.tamano} para ${formData.uso}.`;
+            const msg = `Hola! Soy ${formData.firstname} ${formData.lastname}, busco una bodega ${formData.tamano} para ${formData.uso} en la comuna de ${formData.comuna}.`;
             window.open(`https://wa.me/56912345678?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
