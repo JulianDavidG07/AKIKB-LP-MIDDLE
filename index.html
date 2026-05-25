@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aki KB - Selector de Bodega Ideal</title>
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -149,18 +147,17 @@
     <div class="progress-container">
         <div class="max-width-container mx-auto" style="max-width: 460px;">
             <div class="progress">
-                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 20%"></div>
+                <div id="progressBar" class="progress-bar" role="progressbar" style="width: 25%"></div>
             </div>
             <div class="d-flex justify-content-between mt-2">
                 <small id="backBtn" class="text-muted" style="cursor:pointer; visibility: hidden;">← Volver</small>
-                <small class="text-muted fw-bold" id="stepText">Paso 1 de 5</small>
+                <small class="text-muted fw-bold" id="stepText">Paso 1 de 4</small>
             </div>
         </div>
     </div>
 
     <div class="lp-container">
         
-        <!-- PANTALLA 1: ENTRADA -->
         <div id="screen1" class="screen active text-center">
             <img src="https://46409671.fs1.hubspotusercontent-na1.net/hubfs/46409671/Logo_AKIKB%202-2-1.png" alt="Logo Aki KB" class="logo-placeholder">
             <h1 class="font-800 mb-3" style="font-size: 32px !important;">Encuentra tu bodega ideal en menos de <span class="text-orange">30 segundos</span></h1>
@@ -189,29 +186,15 @@
             </div>
         </div>
 
-        <!-- PANTALLA 2: TAMAÑO -->
         <div id="screen2" class="screen">
             <h2 class="font-800 mb-4">¿Cuánto espacio necesitas?</h2>
             <div id="sizeContainer" class="mb-5">
-                <!-- Se llena vía JS -->
-            </div>
+                </div>
 
             <button id="btnScreen2" class="btn-brand" disabled onclick="navigate(3)">Continuar</button>
         </div>
 
-        <!-- PANTALLA 3: USO -->
         <div id="screen3" class="screen">
-            <h2 id="screen3Title" class="font-800 mb-4">¿Para qué la necesitas?</h2>
-            
-            <div id="optionsContainer" class="mb-4">
-                <!-- Se llena vía JS -->
-            </div>
-
-            <button id="btnScreen3" class="btn-brand" disabled onclick="navigate(4)">Continuar</button>
-        </div>
-
-        <!-- PANTALLA 4: URGENCIA -->
-        <div id="screen4" class="screen">
             <h2 class="font-800 mb-4">¿Cuándo la necesitas?</h2>
             <div class="mb-5">
                 <button class="choice-card mb-3" onclick="selectUrgencia('alta', this)">
@@ -225,11 +208,10 @@
                 </button>
             </div>
 
-            <button id="btnScreen4" class="btn-brand mb-3" disabled onclick="navigate(5)">Cotizar ahora 🚀</button>
+            <button id="btnScreen3" class="btn-brand mb-3" disabled onclick="navigate(4)">Cotizar ahora 🚀</button>
         </div>
 
-        <!-- PANTALLA 5: FORMULARIO (Antes Paso 6) -->
-        <div id="screen5" class="screen">
+        <div id="screen4" class="screen">
             <div id="formContainer">
                 <h2 class="font-800 mb-2">Recibe tu cotización</h2>
                 <p class="text-muted mb-4">Completa tus datos para enviarte los precios detallados.</p>
@@ -265,7 +247,6 @@
                 </form>
             </div>
 
-            <!-- Success Message Inline -->
             <div id="successMsg" class="text-center d-none py-5">
                 <div class="display-1 text-success mb-4">✓</div>
                 <h2 class="font-800">¡Recibimos tu solicitud!</h2>
@@ -276,7 +257,6 @@
 
     </div>
 
-    <!-- Success Modal -->
     <div class="modal fade" id="successModal" tabindex="-1">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4">
@@ -299,19 +279,18 @@
         </div>
     </div>
 
-    <!-- Script de Lógica -->
     <script>
         // CONFIGURACIÓN HUBSPOT
         const PORTAL_ID = '46409671'; 
         const FORM_ID = 'e76bbc8c-66d8-44fc-bb2f-c6d6959f23c1'; 
 
         let currentStep = 1;
-        const totalSteps = 5;
+        const totalSteps = 4; // Flujo reducido a 4 pasos
         const formData = {
             tipo_cliente: '',
-            uso: '',
             tamano: '',
             urgencia: '',
+            bodega_a_cotizar: '', // Propiedad calculada requerida
             firstname: '',
             lastname: '',
             email: '',
@@ -319,34 +298,12 @@
             comuna: ''
         };
 
-        const configB2B = {
-            title: '¿Para qué necesita la empresa la bodega?',
-            options: [
-                { id: 'ecommerce', label: 'E-commerce / Logística', icon: '📦' },
-                { id: 'materiales', label: 'Materiales / Herramientas', icon: '🏗️' },
-                { id: 'archivo', label: 'Archivo / Almacenamiento', icon: '🗄️' }
-            ],
-            sizes: [
-                { id: 'pequeno', label: 'Pequeño (1–5 m²)' },
-                { id: 'mediano', label: 'Mediano (5–10 m²)' },
-                { id: 'grande', label: 'Grande (+10 m²)' }
-            ]
-        };
-
-        const configB2C = {
-            title: '¿Qué necesitas guardar?',
-            options: [
-                { id: 'mudanza', label: 'Mercadería', icon: '🚚' },
-                { id: 'personales', label: 'Cosas personales', icon: '🏠' },
-                { id: 'viaje', label: 'Viaje / Temporal', icon: '🧳' },
-                { id: 'otros', label: 'Otros', icon: '🚲' }
-            ],
-            sizes: [
-                { id: 'pequeno', label: 'Pequeño (Clóset)' },
-                { id: 'mediano', label: 'Mediano (Pieza)' },
-                { id: 'grande', label: 'Grande (Depto completo)' }
-            ]
-        };
+        // Medidas unificadas y estandarizadas de forma idéntica para ambas rutas
+        const CONFIG_TAMANOS = [
+            { id: 'pequeno', label: 'Pequeño (1,5 a 4,5 m²)' },
+            { id: 'mediano', label: 'Mediano (6 a 10,5 m²)' },
+            { id: 'grande', label: 'Grande (+12 m²)' }
+        ];
 
         function selectType(type) {
             formData.tipo_cliente = type;
@@ -355,65 +312,51 @@
         }
 
         function renderScreen2() {
-            const config = formData.tipo_cliente === 'B2B' ? configB2B : configB2C;
             const sizeContainer = document.getElementById('sizeContainer');
-            sizeContainer.innerHTML = config.sizes.map(sz => `
+            sizeContainer.innerHTML = CONFIG_TAMANOS.map(sz => `
                 <button class="choice-card mb-2 ${formData.tamano === sz.id ? 'selected' : ''}" onclick="selectTamano('${sz.id}', this)">
                     <span class="fw-bold">${sz.label}</span>
                 </button>
             `).join('');
         }
 
-        function renderScreen3() {
-            const config = formData.tipo_cliente === 'B2B' ? configB2B : configB2C;
-            document.getElementById('screen3Title').innerText = config.title;
-            
-            const optContainer = document.getElementById('optionsContainer');
-            optContainer.innerHTML = config.options.map(opt => `
-                <button class="choice-card mb-2 ${formData.uso === opt.id ? 'selected' : ''}" onclick="selectUso('${opt.id}', this)">
-                    <div class="d-flex align-items-center">
-                        <div class="icon-box">${opt.icon}</div>
-                        <span class="fw-bold">${opt.label}</span>
-                    </div>
-                </button>
-            `).join('');
-        }
-
         function selectTamano(id, el) {
             formData.tamano = id;
+            
+            // Mapeo directo y limpio para la propiedad "bodega a cotizar" enviada a HS
+            if (id === 'pequeno') {
+                formData.bodega_a_cotizar = 'Pequeño: 1,5 a 4,5 m2';
+            } else if (id === 'mediano') {
+                formData.bodega_a_cotizar = 'Mediano: 6 a 10,5 m2';
+            } else if (id === 'grande') {
+                formData.bodega_a_cotizar = 'Grande: +12 m2';
+            }
+
             document.querySelectorAll('#sizeContainer .choice-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('btnScreen2').disabled = false;
         }
 
-        function selectUso(id, el) {
-            formData.uso = id;
-            document.querySelectorAll('#optionsContainer .choice-card').forEach(c => c.classList.remove('selected'));
+        function selectUrgencia(val, el) {
+            formData.urgencia = val;
+            document.querySelectorAll('#screen3 .choice-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('btnScreen3').disabled = false;
         }
 
-        function selectUrgencia(val, el) {
-            formData.urgencia = val;
-            document.querySelectorAll('#screen4 .choice-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            document.getElementById('btnScreen4').disabled = false;
-        }
-
         function navigate(step) {
-            // Hide all
+            // Ocultar pantallas
             document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-            // Show target
+            // Activar pantalla actual
             document.getElementById('screen' + step).classList.add('active');
             currentStep = step;
 
-            // Update Progress
+            // Actualizar barra de progreso
             const prog = (step / totalSteps) * 100;
             document.getElementById('progressBar').style.width = prog + '%';
             document.getElementById('stepText').innerText = `Paso ${step} de ${totalSteps}`;
             document.getElementById('backBtn').style.visibility = step > 1 ? 'visible' : 'hidden';
 
-            if (step === 3) renderScreen3();
             window.scrollTo(0, 0);
         }
 
@@ -432,12 +375,11 @@
             const text = document.getElementById('btnText');
             const spinner = document.getElementById('btnSpinner');
 
-            // Activar Loader
             btn.disabled = true;
             text.classList.add('d-none');
             spinner.classList.remove('d-none');
 
-            // --- Envío a HubSpot ---
+            // --- API de HubSpot ---
             const endpoint = `https://api.hsforms.com/submissions/v3/integration/submit/${PORTAL_ID}/${FORM_ID}`;
             const payload = {
                 fields: [
@@ -445,11 +387,11 @@
                     { name: 'lastname', value: formData.lastname },
                     { name: 'email', value: formData.email },
                     { name: 'phone', value: formData.telefono },
-                    { name: 'comuna', value: formData.comuna }, // Asegúrate que el internal name sea 'comuna' en HS
+                    { name: 'comuna', value: formData.comuna }, 
                     { name: 'tipo_cliente', value: formData.tipo_cliente },
                     { name: 'tamano', value: formData.tamano },
-                    { name: 'uso', value: formData.uso },
-                    { name: 'urgencia', value: formData.urgencia }
+                    { name: 'urgencia', value: formData.urgencia },
+                    { name: 'bodega_a_cotizar', value: formData.bodega_a_cotizar } // Propiedad mapeada e intermedia
                 ],
                 context: {
                     pageUri: window.location.href,
@@ -469,10 +411,8 @@
                     text.classList.remove('d-none');
                     spinner.classList.add('d-none');
                     
-                    // Mostrar modal de éxito
+                    // Abrir modal e inline success
                     new bootstrap.Modal(document.getElementById('successModal')).show();
-                    
-                    // Opcional: mostrar mensaje en pantalla si el modal se cierra
                     document.getElementById('formContainer').classList.add('d-none');
                     document.getElementById('successMsg').classList.remove('d-none');
                 } else {
@@ -493,12 +433,11 @@
         }
 
         function openWA() {
-            const msg = `Hola! Soy ${formData.firstname} ${formData.lastname}, busco una bodega ${formData.tamano} para ${formData.uso} en la comuna de ${formData.comuna}.`;
+            const msg = `Hola! Soy ${formData.firstname} ${formData.lastname}, busco una bodega con tamaño [${formData.bodega_a_cotizar}] en la comuna de ${formData.comuna}.`;
             window.open(`https://wa.me/56912345678?text=${encodeURIComponent(msg)}`, '_blank');
         }
     </script>
 
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
